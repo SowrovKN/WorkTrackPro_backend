@@ -46,7 +46,7 @@ async function run() {
       const result = await workList.insertOne(data);
       res.send(result);
     });
-    // show all work
+    // show specifig work
     app.get("/worklist/:email", async (req, res) => {
       const email = req.params.email;
       const quary = { email: email };
@@ -99,6 +99,11 @@ async function run() {
       const id = req.params.id;
       const filter = { _id: new ObjectId(id) };
       const result = await users.findOne(filter);
+      res.send(result);
+    });
+    // show all worklist
+    app.get("/worklist", async (req, res) => {
+      const result = await workList.find().toArray();
       res.send(result);
     });
     // Send a ping to confirm a successful connection
