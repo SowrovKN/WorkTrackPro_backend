@@ -76,6 +76,31 @@ async function run() {
       res.send(result);
     });
 
+    // all employee
+    app.get("/allEmployee", async (req, res) => {
+      const result = await users.find().toArray();
+      res.send(result);
+    });
+    // update varified
+    app.patch("/verified/:id", async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) };
+      const options = { upsert: true };
+      const updateDoc = {
+        $set: {
+          verified: req.body.verified,
+        },
+      };
+      const result = await users.updateOne(filter, updateDoc, options);
+      res.send(result);
+    });
+    //user
+    app.get("/details/:id", async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) };
+      const result = await users.findOne(filter);
+      res.send(result);
+    });
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log(
