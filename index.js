@@ -76,8 +76,8 @@ async function run() {
       res.send(result);
     });
 
-    // all employee
-    app.get("/allEmployee", async (req, res) => {
+    // jsut employee
+    app.get("/employee", async (req, res) => {
       const result = await users.find().toArray();
       res.send(result);
     });
@@ -104,6 +104,24 @@ async function run() {
     // show all worklist
     app.get("/worklist", async (req, res) => {
       const result = await workList.find().toArray();
+      res.send(result);
+    });
+    // show all employee
+    app.get("/allEmployee", async (req, res) => {
+      const quary = { verified: true };
+      const result = await users.find(quary).toArray();
+      res.send(result);
+    });
+    app.patch("/makeHR/:id", async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) };
+      const options = { upsert: true };
+      const updateDoc = {
+        $set: {
+          role: req.body.role,
+        },
+      };
+      const result = await users.updateOne(filter, updateDoc, options);
       res.send(result);
     });
     // Send a ping to confirm a successful connection
