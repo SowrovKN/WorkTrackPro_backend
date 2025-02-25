@@ -28,6 +28,7 @@ async function run() {
     const users = db.collection("users");
     const workList = db.collection("workList");
     const paymentReqList = db.collection("paymentReqList");
+    const paymentSuccList = db.collection("paymentSuccList");
 
     app.post("/users/:email", async (req, res) => {
       const email = req.params.email;
@@ -168,7 +169,12 @@ async function run() {
       const result = await users.updateOne(filter, updateDoc, options);
       res.send(result);
     });
-    // Send a ping to confirm a successful connection
+    // \success payment
+    app.post("/successPayment", async (req, res) => {
+      const data = req.body;
+      const result = await paymentSuccList.insertOne(data);
+      res.send(result);
+    }); // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log(
       "Pinged your deployment. You successfully connected to MongoDB!"
