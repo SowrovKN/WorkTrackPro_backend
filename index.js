@@ -136,6 +136,7 @@ async function run() {
       const result = await paymentReqList.insertOne(data);
       res.send(result);
     });
+    //get payment request
     app.get("/getPaymentReq", async (req, res) => {
       const result = await paymentReqList.find().toArray();
       res.send(result);
