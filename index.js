@@ -27,6 +27,7 @@ async function run() {
     const db = client.db("workTrackPro");
     const users = db.collection("users");
     const workList = db.collection("workList");
+    const paymentReqList = db.collection("paymentReqList");
 
     app.post("/users/:email", async (req, res) => {
       const email = req.params.email;
@@ -130,7 +131,29 @@ async function run() {
       const result = await users.findOne(filter);
       res.send(result);
     });
+    app.post("/paymentReq", async (req, res) => {
+      const data = req.body;
+      const result = await paymentReqList.insertOne(data);
+      res.send(result);
+    });
+    app.get("/getPaymentReq", async (req, res) => {
+      const result = await paymentReqList.find().toArray();
+      res.send(result);
+    });
+    app.patch("/paymentStatus/:id", async (req, res) => {
+      const id = req.params.id;
+      const quary = { _id: new ObjectId(id) };
 
+      const options = { upsert: true };
+      const updateDoc = {
+        $set: {
+          payment: req.body.payment,
+          date: req.body.date,
+        },
+      };
+      const result = await paymentReqList.updateOne(quary, updateDoc, options);
+      res.send(result);
+    });
     //update fired details
     app.patch("/fireEmployee/:id", async (req, res) => {
       const id = req.params.id;
