@@ -124,6 +124,26 @@ async function run() {
       const result = await users.updateOne(filter, updateDoc, options);
       res.send(result);
     });
+    app.get("/getUser/:email", async (req, res) => {
+      const email = req.params.email;
+      const filter = { email: email };
+      const result = await users.findOne(filter);
+      res.send(result);
+    });
+
+    //update fired details
+    app.patch("/fireEmployee/:id", async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) };
+      const options = { upsert: true };
+      const updateDoc = {
+        $set: {
+          fired: req.body.fired,
+        },
+      };
+      const result = await users.updateOne(filter, updateDoc, options);
+      res.send(result);
+    });
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log(
