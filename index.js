@@ -78,12 +78,12 @@ async function run() {
       res.send(result);
     });
 
-    // jsut employee
+    // just employee
     app.get("/employee", async (req, res) => {
       const result = await users.find().toArray();
       res.send(result);
     });
-    // update varified
+    // varified status update
     app.patch("/verified/:id", async (req, res) => {
       const id = req.params.id;
       const filter = { _id: new ObjectId(id) };
@@ -114,6 +114,7 @@ async function run() {
       const result = await users.find(quary).toArray();
       res.send(result);
     });
+    //make hr
     app.patch("/makeHR/:id", async (req, res) => {
       const id = req.params.id;
       const filter = { _id: new ObjectId(id) };
@@ -126,12 +127,14 @@ async function run() {
       const result = await users.updateOne(filter, updateDoc, options);
       res.send(result);
     });
+    // find role for dashboard navigation
     app.get("/getUser/:email", async (req, res) => {
       const email = req.params.email;
       const filter = { email: email };
       const result = await users.findOne(filter);
       res.send(result);
     });
+    // payment req by hr for employee payment
     app.post("/paymentReq", async (req, res) => {
       const data = req.body;
       const result = await paymentReqList.insertOne(data);
@@ -142,6 +145,7 @@ async function run() {
       const result = await paymentReqList.find().toArray();
       res.send(result);
     });
+    // update payment status
     app.patch("/paymentStatus/:id", async (req, res) => {
       const id = req.params.id;
       const quary = { _id: new ObjectId(id) };
@@ -169,12 +173,13 @@ async function run() {
       const result = await users.updateOne(filter, updateDoc, options);
       res.send(result);
     });
-    // \success payment
+    // post success payment list
     app.post("/successPayment", async (req, res) => {
       const data = req.body;
       const result = await paymentSuccList.insertOne(data);
       res.send(result);
     });
+    // payment history for specific employee
     app.get("/paymentHistory/:email", async (req, res) => {
       const email = req.params.email;
       const quary = { email: email };
