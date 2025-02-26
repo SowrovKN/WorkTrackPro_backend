@@ -174,7 +174,14 @@ async function run() {
       const data = req.body;
       const result = await paymentSuccList.insertOne(data);
       res.send(result);
-    }); // Send a ping to confirm a successful connection
+    });
+    app.get("/paymentHistory/:email", async (req, res) => {
+      const email = req.params.email;
+      const quary = { email: email };
+      const result = await paymentSuccList.find(quary).toArray();
+      res.send(result);
+    });
+    // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log(
       "Pinged your deployment. You successfully connected to MongoDB!"
